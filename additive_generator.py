@@ -54,7 +54,7 @@ def monobite_test(sequence: list, alpha: float):
     if p_value < alpha:
         print("the sequence is non-random")
     else:
-        print("the sequence is  random")
+        print("the sequence is random")
 
 
 def run_test(sequence: list, alpha: float):
@@ -80,6 +80,8 @@ def longest_run_of_ones(sequence: list) -> int:
     for i in sequence:
         if i == 1:
             count += 1
+        if i ==0:
+            count = 0
         if count > max_count:
             max_count = count
     return max_count
