@@ -1,5 +1,7 @@
 import math
-from scipy.special import gammainc
+import scipy.special as sp
+import matplotlib.pyplot as plt
+
 
 
 class AdditiveGenerator:
@@ -46,7 +48,7 @@ def int_array_to_bit_strings(arr, bits=8):
     return tmp
 
 
-def monobite_test(sequence: list, alpha: float):
+def monobit_test(sequence: list, alpha: float):
     ones = sequence.count(1)
     zeros = sequence.count(0)
     s = abs(ones - zeros)/math.sqrt(len(sequence))
@@ -80,7 +82,7 @@ def longest_run_of_ones(sequence: list) -> int:
     for i in sequence:
         if i == 1:
             count += 1
-        if i ==0:
+        if i == 0:
             count = 0
         if count > max_count:
             max_count = count
@@ -158,7 +160,8 @@ def run_of_ones_in_a_block_test(sequence: list, alpha: float):
     chi_square = 0.0
     for i in range(k+1):
         chi_square += ((v_vals[i] - N * pi_vals[i]) ** 2) / (N * pi_vals[i])
-    p_val = gammainc(k/2, chi_square/2)
+    p_val = sp.gammaincc(k/2, chi_square) /(2**(k/2))
+    print(p_val)
     if p_val < alpha:
         print("the sequence is non-random")
     else:
@@ -174,7 +177,7 @@ if __name__ == '__main__':
     a_bits = int_array_to_bit_strings(a)
     print(find_period(a))
     print(find_period(a_bits))
-    monobite_test(a_bits, 0.01)
+    monobit_test(a_bits, 0.01)
     run_test(a_bits, 0.01)
     run_of_ones_in_a_block_test(a_bits, 0.01)
 
@@ -185,7 +188,7 @@ if __name__ == '__main__':
     bits_pi = bits_pi.replace(' ', '').replace('\n', '').replace(',', '')
     bits_pi = list(bits_pi)
     bits_pi = list(map(int, bits_pi))
-    monobite_test(bits_pi, 0.01)
+    monobit_test(bits_pi, 0.01)
     run_test(bits_pi, 0.01)
     run_of_ones_in_a_block_test(bits_pi, 0.01)
 
@@ -196,9 +199,15 @@ if __name__ == '__main__':
     bits_e = bits_e.replace(' ', '').replace('\n', '').replace(',', '')
     bits_e = list(bits_e)
     bits_e = list(map(int, bits_e))
-    monobite_test(bits_e, 0.01)
+    monobit_test(bits_e, 0.01)
     run_test(bits_e, 0.01)
     run_of_ones_in_a_block_test(bits_e, 0.01)
 
+    #arr = range(-100, 100)
+    #arr_fun = list(map(math.erfc, arr))
+    #plt.plot(arr, arr_fun)
+    #plt.grid(True)
+    #plt.show()
+#
 
 
