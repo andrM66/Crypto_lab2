@@ -1,6 +1,7 @@
 import math
 import scipy.special as sp
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 
@@ -53,6 +54,7 @@ def monobit_test(sequence: list, alpha: float):
     zeros = sequence.count(0)
     s = abs(ones - zeros)/math.sqrt(len(sequence))
     p_value = math.erfc(s/math.sqrt(2))
+    print(p_value)
     if p_value < alpha:
         print("the sequence is non-random")
     else:
@@ -70,6 +72,7 @@ def run_test(sequence: list, alpha: float):
             v += 1
     v += 1
     p_val = math.erfc(abs(v - 2 * len(sequence) * pi * (1 - pi))/ (2 * math.sqrt(2 * len(sequence))*pi * (1 - pi)))
+    print(p_val)
     if p_val < alpha:
         print("the sequence is non-random")
     else:
@@ -98,17 +101,17 @@ def run_of_ones_in_a_block_test(sequence: list, alpha: float):
     if 128 <= n < 6272:
         m = 8
         k = 3
-        N = 16
+        N = len(sequence)//m
         pi_vals = [0.21148, 0.3672, 0.2305, 0.1875]
     elif 6272 <= n < 750000:
         m = 128
         k = 5
-        N = 49
+        N = len(sequence)//m
         pi_vals = [0.1174, 0.2430, 0.2493, 0.1752, 0.1027, 0.1124]
     elif n >= 750000:
         m = 10000
         k = 6
-        N = 75
+        N = len(sequence)//m
         pi_vals = [0.0882, 0.2092, 0.2483, 0.1933, 0.1208, 0.0675, 0.0727]
     else:
         print("the sequence is too short")
@@ -160,13 +163,13 @@ def run_of_ones_in_a_block_test(sequence: list, alpha: float):
     chi_square = 0.0
     for i in range(k+1):
         chi_square += ((v_vals[i] - N * pi_vals[i]) ** 2) / (N * pi_vals[i])
-    p_val = sp.gammaincc(k/2, chi_square) /(2**(k/2))
+        #chi_square += ((v_vals[i] - len(blocked_sequence) * pi_vals[i]) ** 2) / (len(blocked_sequence) * pi_vals[i])
+    p_val = sp.gammaincc(k/2, chi_square/2)
     print(p_val)
     if p_val < alpha:
         print("the sequence is non-random")
     else:
         print("the sequence is random")
-
 
 
 if __name__ == '__main__':
